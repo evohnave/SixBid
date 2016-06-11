@@ -1,5 +1,6 @@
 source(file = "SixBidGenerics.r")
-
+require(dplyr)
+require(stringi)
 
 ## OK, this works, but need to make it more generic
 ##  also, put in a loop to get all of the lots etc
@@ -14,6 +15,7 @@ lots <- getAuctionLots(auction = auction, searchTerm = searchTerm)
 # a lot is https://www.sixbid.com/browse.html?auction=____&lot=______
 
 if(length(lots) > 0){print("not null")}
+
 lot <- lots[1]
 # Image data
 imageUrl <- paste(baseUrl, imageUrlStart, auction, "/", lot, "l.jpg", sep = "")
@@ -37,8 +39,6 @@ theTable <- html_table(html, trim = TRUE, fill = TRUE)[2][[1]]
 allData <- theTable$X10[1]
 auctionId <- iconv(theTable$X3[1], from = "UTF-8", to = "latin1")
 
-# need stringi
-require(stringi)
 # get estimate
 estimate <- allData %>% 
     gsub(pattern = "\\r\\n", replacement = "") %>%  # remove \r\n
